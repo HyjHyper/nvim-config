@@ -27,29 +27,17 @@ local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
 return {
-
-  s(
-    { trig = "newsnip", snippetType = "autosnippet" },
-    fmt(
-      [[ 
-    s("<>",
-    <>(<>,{
-    <> }
-    )),<>]],
-      {
-        i(1, "trig"),
-        c(2, { t("fmt"), t("fmta") }),
-        i(3, "info"),
-        i(4, "inputs"),
-        i(5),
-      },
-      { delimiters = "<>" }
-    )
-  ),
-  s(
-    "example1",
-    fmt("just an {iNode1}", {
-      iNode1 = i(1, "example"),
-    })
-  ),
+  s("link", {
+    t("[["),
+    i(1),
+    t("|文言:"),
+    d(2, function(args)
+      -- the returned snippetNode doesn't need a position; it's inserted
+      -- "inside" the dynamicNode.
+      return sn(nil, {
+        -- jump-indices are local to each snippetNode, so restart at 1.
+        i(1, args[1]),
+      })
+    end, { 1 }),
+  }),
 }
